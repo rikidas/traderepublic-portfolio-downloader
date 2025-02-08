@@ -3,8 +3,8 @@ package console
 import (
 	"fmt"
 
-	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublc/api"
-	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublc/api/auth"
+	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api"
+	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api/auth"
 )
 
 type AuthServiceInterface interface {

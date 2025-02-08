@@ -7,6 +7,7 @@ init:
 
 generate:
 	rm -f **/*_mock.go
+	
 	go generate ./...
 	go run ./cmd/example-generator
 	
