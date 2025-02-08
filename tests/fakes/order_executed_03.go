@@ -12,7 +12,7 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 )
 
-var OrderExecuted03 = TransactionTestCase{
+var OrderExecuted03 = LegacyTransactionTestCase{
 	TimelineDetailsData: TimelineDetailsTestData{
 		Raw: []byte(`{
 		"id": "a3b8e625-a6e9-4269-9529-01ebb86d69bb",

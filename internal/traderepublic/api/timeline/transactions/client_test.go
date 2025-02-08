@@ -12,29 +12,31 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/reader"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api/timeline/transactions"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes"
+
+	_ "github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes/timeline"
 )
 
 func TestClient_Get(t *testing.T) {
 	t.Parallel()
 
-	testCases := map[string]fakes.TransactionTestCase{
-		"CardSuccessfulTransaction01": fakes.CardSuccessfulTransaction01,
-		"CardSuccessfulTransaction02": fakes.CardSuccessfulTransaction02,
-	}
-
 	logger := log.New()
 	logger.Out = io.Discard
-
 	controller := gomock.NewController(t)
 	readerMock := reader.NewMockInterface(controller)
 	client := transactions.NewClient(readerMock, logger)
 
-	for testCaseName, testCase := range testCases {
+	for testCaseName, testCase := range fakes.TimelineTestCasesSupported {
+		if !testCase.Enabled {
+			t.Logf("Skipped disabled test '%s'", testCaseName)
+
+			continue
+		}
+
 		readerMock.
 			EXPECT().
 			Read("timelineTransactions", gomock.Any()).
 			DoAndReturn(func(_ string, _ map[string]any) (reader.JSONResponse, error) {
-				return reader.NewJSONResponse(testCase.TimelineTransactionsData.Raw), nil
+				return reader.NewJSONResponse([]byte(`{"items":[` + testCase.JSON + "]}")), nil
 			})
 
 		var actual []transactions.ResponseItem
@@ -47,6 +49,6 @@ func TestClient_Get(t *testing.T) {
 		}
 
 		assert.Len(t, actual, 1, fmt.Sprintf("case '%s'", testCaseName))
-		assert.Equal(t, testCase.TimelineTransactionsData.Unmarshalled, actual[0], fmt.Sprintf("case '%s'", testCaseName))
+		assert.Equal(t, testCase.Result, actual[0], fmt.Sprintf("case '%s'", testCaseName))
 	}
 }

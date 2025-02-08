@@ -12,7 +12,7 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 )
 
-var SSPCorporateActionInvoiceCash01 = TransactionTestCase{
+var SSPCorporateActionInvoiceCash01 = LegacyTransactionTestCase{
 	TimelineTransactionsData: TimelineTransactionsTestData{
 		Raw: []byte(`{
 		"items": [

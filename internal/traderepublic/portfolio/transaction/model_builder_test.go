@@ -11,40 +11,41 @@ import (
 
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/reader"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api/timeline/details"
+	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api/timeline/transactions"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes"
+
+	_ "github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes/transaction"
 )
 
 func TestModelBuilderBuildSupported(t *testing.T) {
 	t.Parallel()
 
-	testCases := fakes.TransactionTestCasesSupported
 	logger := log.New()
 	logger.Out = io.Discard
-
 	controller := gomock.NewController(t)
 	readerMock := reader.NewMockInterface(controller)
 	detailsClient := details.NewClient(readerMock, logger)
 	normalizer := details.NewTransactionResponseNormalizer(logger)
 	builderFactory := transaction.ProvideModelBuilderFactory(logger)
 
-	for testCaseName, testCase := range testCases {
+	for testCaseName, testCase := range fakes.TransactionTestCasesSupported {
 		readerMock.
 			EXPECT().
 			Read("timelineDetailV2", gomock.Any()).
 			DoAndReturn(func(_ string, _ map[string]any) (reader.JSONResponse, error) {
-				return reader.NewJSONResponse(testCase.TimelineDetailsData.Raw), nil
+				return reader.NewJSONResponse([]byte(testCase.Source.JSON)), nil
 			})
 
 		var response details.Response
 
-		err := detailsClient.Details("b20e367c-5542-4fab-9fd6-6faa5e7ab582", &response)
+		err := detailsClient.Details(testCase.Result.UUID, &response)
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
 
 		normalizedResponse, err := normalizer.Normalize(response)
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
 
-		builder, err := builderFactory.Create(testCase.EventType, normalizedResponse)
+		builder, err := builderFactory.Create(transactions.EventType(testCase.Source.Parent.Result.EventType), normalizedResponse)
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
 
 		if err != nil {
@@ -53,7 +54,7 @@ func TestModelBuilderBuildSupported(t *testing.T) {
 
 		actual, err := builder.Build()
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
-		assert.Equal(t, testCase.Transaction, actual, fmt.Sprintf("case '%s'", testCaseName))
+		assert.Equal(t, testCase.Result, actual, fmt.Sprintf("case '%s'", testCaseName))
 	}
 }
 
@@ -73,12 +74,12 @@ func TestModelBuilderBuildUnsupported(t *testing.T) {
 			EXPECT().
 			Read("timelineDetailV2", gomock.Any()).
 			DoAndReturn(func(_ string, _ map[string]any) (reader.JSONResponse, error) {
-				return reader.NewJSONResponse(testCase.TimelineDetailsData.Raw), nil
+				return reader.NewJSONResponse([]byte(testCase.Source.JSON)), nil
 			})
 
 		var response details.Response
 
-		err := detailsClient.Details("b20e367c-5542-4fab-9fd6-6faa5e7ab582", &response)
+		err := detailsClient.Details(testCase.Result.UUID, &response)
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
 
 		normalizedResponse, _ := normalizer.Normalize(response)
@@ -91,7 +92,6 @@ func TestModelBuilderBuildUnsupported(t *testing.T) {
 func TestModelBuilderBuildUnknown(t *testing.T) {
 	t.Parallel()
 
-	testCases := fakes.TransactionTestCasesUnknown
 	logger := log.New()
 	controller := gomock.NewController(t)
 	readerMock := reader.NewMockInterface(controller)
@@ -99,17 +99,17 @@ func TestModelBuilderBuildUnknown(t *testing.T) {
 	normalizer := details.NewTransactionResponseNormalizer(logger)
 	builderFactory := transaction.ProvideModelBuilderFactory(logger)
 
-	for testCaseName, testCase := range testCases {
+	for testCaseName, testCase := range fakes.TransactionTestCasesUnknown {
 		readerMock.
 			EXPECT().
 			Read("timelineDetailV2", gomock.Any()).
 			DoAndReturn(func(_ string, _ map[string]any) (reader.JSONResponse, error) {
-				return reader.NewJSONResponse(testCase.TimelineDetailsData.Raw), nil
+				return reader.NewJSONResponse([]byte(testCase.Source.JSON)), nil
 			})
 
 		var response details.Response
 
-		err := detailsClient.Details("b20e367c-5542-4fab-9fd6-6faa5e7ab582", &response)
+		err := detailsClient.Details(testCase.Result.UUID, &response)
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
 
 		normalizedResponse, err := normalizer.Normalize(response)

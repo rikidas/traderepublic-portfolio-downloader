@@ -1,22 +1,21 @@
-package fakes
+package details_test
 
-var OrderExecuted04 = LegacyTransactionTestCase{
-	TimelineDetailsData: TimelineDetailsTestData{
-		Raw: []byte(`{
-		"id": "61f297f9-f9c3-46c4-a15c-cdd50d5544ad",
+import "github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes"
+
+var BenefitsSavebackExecution01 = fakes.DetailsTestCase{
+	Enabed: false,
+	JSON: `{
+		"id": "73fc417a-62ef-4179-a85e-9f3b29224567",
 		"sections": [
 		  {
-			"action": {
-			  "payload": "XF000AVAX016",
-			  "type": "instrumentDetail"
-			},
+			"action": null,
 			"data": {
-			  "icon": "logos/XF000AVAX016/v2",
+			  "icon": "logos/XF000DOT0011/v2",
 			  "status": "executed",
 			  "subtitleText": null,
-			  "timestamp": "2024-03-12T15:21:56.707+0000"
+			  "timestamp": "2024-03-22T18:15:06.448+0000"
 			},
-			"title": "Du hast 2.517,95 €  erhalten",
+			"title": "Dein Bonus von 15,00 € wurde investiert",
 			"type": "header"
 		  },
 		  {
@@ -34,17 +33,17 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "Verkauf",
+				  "text": "Saveback",
 				  "trend": null,
 				  "type": "text"
 				},
 				"style": "plain",
-				"title": "Orderart"
+				"title": "Auftragsart"
 			  },
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "Avalanche",
+				  "text": "Polkadot",
 				  "trend": null,
 				  "type": "text"
 				},
@@ -61,44 +60,17 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "1,71 %",
-				  "trend": "positive",
-				  "type": "text"
-				},
-				"style": "plain",
-				"title": "Rendite"
-			  },
-			  {
-				"detail": {
-				  "action": null,
-				  "text": "42,44 €",
-				  "trend": "positive",
-				  "type": "text"
-				},
-				"style": "plain",
-				"title": "Gewinn"
-			  }
-			],
-			"title": "Performance",
-			"type": "horizontalTable"
-		  },
-		  {
-			"action": null,
-			"data": [
-			  {
-				"detail": {
-				  "action": null,
-				  "text": "65",
+				  "text": "2.270212",
 				  "trend": null,
 				  "type": "text"
 				},
 				"style": "plain",
-				"title": "Anteile"
+				"title": "Aktien"
 			  },
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "38,75 €",
+				  "text": "6,61 €",
 				  "trend": null,
 				  "type": "text"
 				},
@@ -108,7 +80,7 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "1,00 €",
+				  "text": "Kostenlos",
 				  "trend": null,
 				  "type": "text"
 				},
@@ -118,7 +90,7 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			  {
 				"detail": {
 				  "action": null,
-				  "text": "+ 2.517,95 €",
+				  "text": "15,00 €",
 				  "trend": null,
 				  "type": "text"
 				},
@@ -134,22 +106,22 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			"data": [
 			  {
 				"action": {
-				  "payload": "https://traderepublic-data-production.s3.eu-central-1.amazonaws.com/timeline/postbox",
+				  "payload": "https://traderepublic-data-production.s3.eu-central-1.amazonaws.com/timeline/postbox/",
 				  "type": "browserModal"
 				},
-				"detail": "12.03.2024",
-				"id": "7afcc1b3-42f4-4ecd-a40d-b17efd8b1478",
-				"postboxType": "CRYPTO_SECURITIES_SETTLEMENT",
-				"title": "Abrechnung"
+				"detail": "22.03.2024",
+				"id": "3a54ce6c-7bf7-4db5-a79e-5c24dbc71594",
+				"postboxType": "SAVINGS_PLAN_EXECUTED_V2",
+				"title": "Abrechnung Ausführung"
 			  },
 			  {
 				"action": {
-				  "payload": "https://traderepublic-data-production.s3.eu-central-1.amazonaws.com/timeline/postbox",
+				  "payload": "https://traderepublic-data-production.s3.eu-central-1.amazonaws.com/timeline/postbox/",
 				  "type": "browserModal"
 				},
-				"detail": "12.03.2024",
-				"id": "f8c83c0f-5294-4854-9645-58c65bab8170",
-				"postboxType": "COSTS_INFO_SELL_V2",
+				"detail": "21.03.2024",
+				"id": "70776ac6-b87e-4c73-a8cb-558466234f0d",
+				"postboxType": "COSTS_INFO_SAVINGS_PLAN_V2",
 				"title": "Kosteninformation"
 			  }
 			],
@@ -157,6 +129,9 @@ var OrderExecuted04 = LegacyTransactionTestCase{
 			"type": "documents"
 		  }
 		]
-	  }`),
-	},
+	  }`,
+}
+
+func init() {
+	fakes.DetailsTestCasesSupported["BenefitsSavebackExecution01"] = BenefitsSavebackExecution01
 }

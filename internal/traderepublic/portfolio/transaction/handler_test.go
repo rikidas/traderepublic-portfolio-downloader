@@ -18,6 +18,8 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/document"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 	"github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes"
+
+	_ "github.com/dhojayev/traderepublic-portfolio-downloader/tests/fakes/transaction"
 )
 
 func TestItDoesReturnErrorIfTransactionDetailsCannotBeFetched(t *testing.T) {
@@ -93,13 +95,13 @@ func TestItDoesReturnErrorIfTransactionTypeUnsupported(t *testing.T) {
 			EXPECT().
 			Read(transactions.RequestDataType, gomock.Any()).
 			Times(1).
-			Return(reader.NewJSONResponse(testCase.TimelineTransactionsData.Raw), nil)
+			Return(reader.NewJSONResponse([]byte(testCase.Source.JSON)), nil)
 
 		readerMock.
 			EXPECT().
-			Read(details.RequestDataType, map[string]any{"id": testCase.TimelineTransactionsData.Unmarshalled.Action.Payload}).
+			Read(details.RequestDataType, map[string]any{"id": testCase.Result.UUID}).
 			Times(1).
-			Return(reader.NewJSONResponse(testCase.TimelineDetailsData.Raw), nil)
+			Return(reader.NewJSONResponse([]byte(testCase.Source.JSON)), nil)
 
 		err := handler.Handle()
 

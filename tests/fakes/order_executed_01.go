@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	OrderExecuted01 = TransactionTestCase{
+	OrderExecuted01 = LegacyTransactionTestCase{
 		TimelineDetailsData: TimelineDetailsTestData{
 			Raw: []byte(`{
 			"id": "b20e367c-5542-4fab-9fd6-6faa5e7ab582",

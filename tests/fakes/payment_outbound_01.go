@@ -11,7 +11,7 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 )
 
-var PaymentOutbound01 = TransactionTestCase{
+var PaymentOutbound01 = LegacyTransactionTestCase{
 	TimelineDetailsData: TimelineDetailsTestData{
 		Raw: []byte(`{
   "id": "a2597441-45f4-4ae2-a881-ab4a65aa0f0e",

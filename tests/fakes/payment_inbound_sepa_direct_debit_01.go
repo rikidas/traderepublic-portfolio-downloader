@@ -12,7 +12,7 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 )
 
-var PaymentInboundSepaDirectDebit01 = TransactionTestCase{
+var PaymentInboundSepaDirectDebit01 = LegacyTransactionTestCase{
 	TimelineDetailsData: TimelineDetailsTestData{
 		Raw: []byte(`{
 		"id": "ddc4ed4f-0314-42cf-8a65-930da1354348",

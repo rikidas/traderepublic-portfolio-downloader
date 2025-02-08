@@ -17,10 +17,9 @@ import (
 func TestMakeSupported(t *testing.T) {
 	t.Parallel()
 
-	testCases := fakes.TransactionTestCasesSupported
 	factory := transaction.NewCSVEntryFactory(log.New())
 
-	for testCaseName, testCase := range testCases {
+	for testCaseName, testCase := range fakes.CSVTestCasesSupported {
 		actual, err := factory.Make(testCase.Transaction)
 
 		assert.NoError(t, err, fmt.Sprintf("case '%s'", testCaseName))
@@ -29,18 +28,17 @@ func TestMakeSupported(t *testing.T) {
 			continue
 		}
 
-		assert.Equal(t, testCase.CSVEntry.AssetType, actual.AssetType, fmt.Sprintf("case '%s'", testCaseName))
-		assertHelper(t, testCase.CSVEntry, actual, testCaseName)
+		assert.Equal(t, testCase.Result.AssetType, actual.AssetType, fmt.Sprintf("case '%s'", testCaseName))
+		assertHelper(t, testCase.Result, actual, testCaseName)
 	}
 }
 
 func TestMakeUnsupported(t *testing.T) {
 	t.Parallel()
 
-	testCases := fakes.TransactionTestCasesUnsupported
 	factory := transaction.NewCSVEntryFactory(log.New())
 
-	for testCaseName, testCase := range testCases {
+	for testCaseName, testCase := range fakes.CSVTestCasesSupported {
 		_, err := factory.Make(testCase.Transaction)
 
 		assert.Error(t, err, fmt.Sprintf("case '%s'", testCaseName))
@@ -50,11 +48,10 @@ func TestMakeUnsupported(t *testing.T) {
 func TestMakeUnknown(t *testing.T) {
 	t.Parallel()
 
-	testCases := fakes.TransactionTestCasesUnknown
 	factory := transaction.NewCSVEntryFactory(log.New())
 
-	for testCaseName, testCase := range testCases {
-		_, err := factory.Make(testCase.Transaction)
+	for testCaseName, testCase := range fakes.TransactionTestCasesUnknown {
+		_, err := factory.Make(testCase.Result)
 
 		assert.Error(t, err, fmt.Sprintf("case '%s'", testCaseName))
 	}

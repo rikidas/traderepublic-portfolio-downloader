@@ -12,7 +12,7 @@ import (
 	"github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/portfolio/transaction"
 )
 
-var BenefitsSpareChangeExecution01 = TransactionTestCase{
+var BenefitsSpareChangeExecution01 = LegacyTransactionTestCase{
 	TimelineDetailsData: TimelineDetailsTestData{
 		Raw: []byte(`{
 		"id": "265cb9c0-664a-45d4-b179-3061f196dd2a",

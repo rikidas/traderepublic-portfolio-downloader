@@ -2,7 +2,7 @@ package fakes
 
 import "github.com/dhojayev/traderepublic-portfolio-downloader/internal/traderepublic/api/timeline/transactions"
 
-var CardSuccessfulTransaction01 = TransactionTestCase{
+var CardSuccessfulTransaction01 = LegacyTransactionTestCase{
 	TimelineTransactionsData: TimelineTransactionsTestData{
 		Raw: []byte(`{
 		"items": 
