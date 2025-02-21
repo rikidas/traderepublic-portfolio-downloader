@@ -74,7 +74,8 @@ func (r TypeResolver) Resolve(eventType transactions.EventType, response Normali
 
 func PurchaseDetector(eventType transactions.EventType, response NormalizedResponse) bool {
 	supportedEventTypes := []transactions.EventType{
-		transactions.EventTypeTradeInvoiceCreated,
+		//Delete trade_invoice as it could be a Sale
+		//transactions.EventTypeTradeInvoiceCreated,
 		transactions.EventTypeSavingsPlanExecuted,
 		transactions.EventTypeSavingsPlanInvoiceCreated,
 	}
@@ -82,10 +83,10 @@ func PurchaseDetector(eventType transactions.EventType, response NormalizedRespo
 	if slices.Contains(supportedEventTypes, eventType) {
 		return true
 	}
-
-	if eventType != transactions.EventTypeOrderExecuted {
-		return false
-	}
+	//Order executed isnt necessary a sale
+	//if eventType != transactions.EventTypeOrderExecuted {
+	//	return false
+	//}
 
 	orderType, err := response.Overview.GetDataByTitles(OverviewDataTitleOrderType)
 	if err != nil {
@@ -96,9 +97,10 @@ func PurchaseDetector(eventType transactions.EventType, response NormalizedRespo
 }
 
 func SaleDetector(eventType transactions.EventType, response NormalizedResponse) bool {
-	if eventType != transactions.EventTypeOrderExecuted {
-		return false
-	}
+	//Remove this as trade_invoice can be a sale
+	//if eventType != transactions.EventTypeOrderExecuted {
+	//	return false
+	//}
 
 	orderType, err := response.Overview.GetDataByTitles(OverviewDataTitleOrderType)
 	if err != nil {
